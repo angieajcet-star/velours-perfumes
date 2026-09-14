@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velours — Haute Parfumerie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --lila-soft: #ebdcf9;
+      --lila-deep: #7c5295;
+      --rosa-soft: #fde2e4;
+      --rosa-accent: #f4acb7;
+      --celeste-soft: #e2f1f8;
+      --celeste-deep: #4a7c96;
+      --gold-accent: #d4af37;
+      --gold-light: #fef5d9;
+      --text-dark: #2d2335;
+      --text-muted: #625768;
+      --white: #ffffff;
+      --glass-bg: rgba(255, 255, 255, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.8);
+      --shadow-soft: 0 10px 30px rgba(124, 82, 149, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, var(--celeste-soft) 0%, var(--rosa-soft) 50%, var(--lila-soft) 100%);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .brand-logo {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* ------------------------------------
+       1. PANTALLA DE CARGA (LIRIO)
+    ------------------------------------ */
+    #loader-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at center, #ffffff 0%, #f4e8fb 100%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 1.2s ease, visibility 1.2s ease;
+    }
+
+    #loader-screen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .lily-svg {
+      width: 220px;
+      height: 220px;
+    }
+
+    /* Animación de apertura de pétalos */
+    .petal {
+      transform-origin: 100px 150px;
+      animation: bloomPetal 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .petal-left-outer { transform: rotate(0deg); }
+    .petal-right-outer { transform: rotate(0deg); }
+    .petal-left-inner { transform: rotate(0deg); }
+    .petal-right-inner { transform: rotate(0deg); }
+
+    @keyframes bloomPetal {
+      0% {
+        transform: scale(0.2) rotate(0deg);
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1) rotate(var(--angle, 0deg));
+        opacity: 1;
+      }
+    }
+
+    .loader-text {
+      margin-top: 2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      letter-spacing: 5px;
+      color: var(--lila-deep);
+      text-transform: uppercase;
+      animation: fadeInText 2s ease infinite alternate;
+    }
+
+    @keyframes fadeInText {
+      0% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+
+    /* ------------------------------------
+       2. ESTRUCTURA Y NAVEGACIÓN
+    ------------------------------------ */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 8%;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .brand-logo {
+      font-size: 2.2rem;
+      letter-spacing: 5px;
+      color: var(--lila-deep);
+      font-weight: 600;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--lila-deep);
+    }
+
+    /* ------------------------------------
+       3. SECCIÓN HOME / INICIO
+    ------------------------------------ */
+    .view-section {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      min-height: calc(100vh - 90px);
+      padding: 3rem 8%;
+    }
+
+    .view-section.active {
+      display: block;
+      opacity: 1;
+    }
+
+    #home-view {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    #home-view.active {
+      display: flex;
+    }
+
+    .home-content {
+      max-width: 550px;
+      z-index: 2;
+    }
+
+    .subtitle-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--lila-deep);
+      margin-bottom: 1.5rem;
+    }
+
+    .home-title {
+      font-size: 4.2rem;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      color: var(--text-dark);
+      font-weight: 300;
+    }
+
+    .home-title span {
+      display: block;
+      font-style: italic;
+      color: var(--lila-deep);
+      font-weight: 400;
+    }
+
+    .home-description {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    /* Botón Principal */
+    .btn-primary {
+      display: inline-block;
+      padding: 1.2rem 3rem;
+      background: linear-gradient(135deg, var(--lila-deep) 0%, var(--celeste-deep) 100%);
+      color: var(--white);
+      border: none;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(124, 82, 149, 0.25);
+      transition: all 0.4s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(124, 82, 149, 0.4);
+      background: linear-gradient(135deg, var(--celeste-deep) 0%, var(--lila-deep) 100%);
+    }
+
+    /* Arte Ilustrativo de Cisnes */
+    .swans-illustration-container {
+      position: relative;
+      width: 450px;
+      height: 450px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .swan-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 15px 30px rgba(124, 82, 149, 0.15));
+    }
+
+    /* ------------------------------------
+       4. SECCIÓN CATÁLOGO
+    ------------------------------------ */
+    .catalog-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .catalog-title {
+      font-size: 3.2rem;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .gold-divider {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-accent), transparent);
+      margin: 1rem auto;
+    }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .product-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(124, 82, 149, 0.2);
+    }
+
+    .bottle-illustration {
+      width: 140px;
+      height: 180px;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-name {
+      font-size: 1.8rem;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .product-tagline {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .btn-secondary {
+      padding: 0.8rem 2rem;
+      background: transparent;
+      border: 1px solid var(--lila-deep);
+      color: var(--lila-deep);
+      border-radius: 30px;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .btn-secondary:hover {
+      background: var(--lila-deep);
+      color: var(--white);
+    }
+
+    /* ------------------------------------
+       5. MODAL DE NOTAS Y COMPRA
+    ------------------------------------ */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(45, 35, 53, 0.5);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 3rem;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      transform: scale(0.9);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-align: center;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-title {
+      font-size: 2.5rem;
+      color: var(--lila-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .notes-box {
+      background: var(--rosa-soft);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+
+    .note-row {
+      margin-bottom: 0.8rem;
+    }
+
+    .note-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .note-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--lila-deep);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .note-value {
+      font-size: 0.9rem;
+      color: var(--text-dark);
+    }
+
+    .btn-buy {
+      width: 100%;
+      padding: 1.1rem;
+      background: linear-gradient(135deg, var(--gold-accent) 0%, #b89228 100%);
+      color: var(--white);
+      border: none;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .btn-buy:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Toast Notificación */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--lila-deep);
+      color: var(--white);
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      #home-view {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+      }
+      .home-content {
+        margin-bottom: 3rem;
+      }
+      .swans-illustration-container {
+        width: 300px;
+        height: 300px;
+      }
+      .home-title {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. PANTALLA DE CARGA (LIRIO) -->
+  <div id="loader-screen">
+    <svg class="lily-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Tallo -->
+      <path d="M100 150Q100 180 95 200" stroke="#7C9A82" stroke-width="4" stroke-linecap="round"/>
+      
+      <!-- Pétalo Trasero Central -->
+      <path class="petal" style="--angle: 0deg;" d="M100 150C85 110 80 60 100 30C120 60 115 110 100 150Z" fill="#FDE2E4" stroke="#F4ACB7" stroke-width="1.5"/>
+      
+      <!-- Pétalos Laterales Extermos -->
+      <path class="petal petal-left-outer" style="--angle: -40deg;" d="M100 150C70 120 40 80 50 45C75 60 90 110 100 150Z" fill="#EBDCF9" stroke="#C7B2DE" stroke-width="1.5"/>
+      <path class="petal petal-right-outer" style="--angle: 40deg;" d="M100 150C130 120 160 80 150 45C125 60 110 110 100 150Z" fill="#EBDCF9" stroke="#C7B2DE" stroke-width="1.5"/>
+      
+      <!-- Pétalos Frontales -->
+      <path class="petal petal-left-inner" style="--angle: -20deg;" d="M100 150C75 125 60 90 75 55C90 80 98 120 100 150Z" fill="#FFFFFF" stroke="#F4ACB7" stroke-width="1.5"/>
+      <path class="petal petal-right-inner" style="--angle: 20deg;" d="M100 150C125 125 140 90 125 55C110 80 102 120 100 150Z" fill="#FFFFFF" stroke="#F4ACB7" stroke-width="1.5"/>
+
+      <!-- Pistilos de la Flor -->
+      <path d="M100 130Q95 100 90 85" stroke="#D4AF37" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="90" cy="83" r="3" fill="#D4AF37"/>
+      <path d="M100 130Q105 100 110 85" stroke="#D4AF37" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="110" cy="83" r="3" fill="#D4AF37"/>
+    </svg>
+    <div class="loader-text">Velours</div>
+  </div>
+
+  <!-- NAVEGACIÓN -->
+  <header>
+    <div class="brand-logo" onclick="switchView('home')">Velours</div>
+    <nav>
+      <ul>
+        <li><a href="#" onclick="switchView('home')">Inicio</a></li>
+        <li><a href="#" onclick="switchView('catalog')">Colección</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 2. SECCIÓN INICIO / HOME -->
+  <section id="home-view" class="view-section active">
+    <div class="home-content">
+      <span class="subtitle-badge">Haute Parfumerie</span>
+      <h1 class="home-title">La Pureza de <span>los Cisnes</span></h1>
+      <p class="home-description">
+        Sumérgete en un universo de fragancias etéreas. Inspirado en la majestuosidad de los lagos, la delicadeza de los cisnes y la suavidad del terciopelo.
+      </p>
+      <button class="btn-primary" onclick="switchView('catalog')">Ve nuestros productos</button>
+    </div>
+
+    <div class="swans-illustration-container">
+      <svg class="swan-svg" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="150" cy="150" r="120" fill="url(#swanGrad)" opacity="0.6"/>
+        <defs>
+          <radialGradient id="swanGrad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(150 150) rotate(90) scale(120)">
+            <stop stop-color="#EBDCF9"/>
+            <stop offset="0.7" stop-color="#E2F1F8"/>
+            <stop offset="1" stop-color="#FDE2E4" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Cisne Principal -->
+        <g transform="translate(30, 40)">
+          <path d="M130 140C110 160 60 160 40 140C30 130 35 110 50 105C65 100 75 115 90 115C105 115 100 95 95 75C90 55 105 40 115 40C120 40 125 43 123 48C120 53 110 58 112 68C115 80 125 90 135 105C145 120 140 130 130 140Z" fill="#FFFFFF" stroke="#7C5295" stroke-width="1.5"/>
+          <path d="M123 44L132 46L125 51Z" fill="#D4AF37"/>
+          <circle cx="117" cy="45" r="1.5" fill="#2D2335"/>
+        </g>
+
+        <!-- Cisne Secundario -->
+        <g transform="translate(110, 70) scale(0.75)">
+          <path d="M40 140C60 160 110 160 130 140C140 130 135 110 120 105C105 100 95 115 80 115C65 115 70 95 75 75C80 55 65 40 55 40C50 40 45 43 47 48C50 53 60 58 58 68C55 80 45 90 35 105C25 120 30 130 40 140Z" fill="#FFFFFF" stroke="#4A7C96" stroke-width="1.5"/>
+          <path d="M47 44L38 46L45 51Z" fill="#D4AF37"/>
+          <circle cx="53" cy="45" r="1.5" fill="#2D2335"/>
+        </g>
+
+        <!-- Destellos y Ondas -->
+        <path d="M30 200 C100 205, 200 205, 270 200" stroke="#D4AF37" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+        <circle cx="70" cy="80" r="3" fill="#D4AF37" opacity="0.8"/>
+        <circle cx="230" cy="110" r="2" fill="#D4AF37" opacity="0.8"/>
+        <circle cx="210" cy="60" r="4" fill="#F4ACB7" opacity="0.8"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 3. SECCIÓN CATÁLOGO DE PERFUMES -->
+  <section id="catalog-view" class="view-section">
+    <div class="catalog-header">
+      <h2 class="catalog-title">Nuestra Colección</h2>
+      <div class="gold-divider"></div>
+      <p style="color: var(--text-muted);">Descubre las creaciones olfativas exclusivas de Velours</p>
+    </div>
+
+    <div class="catalog-grid" id="catalog-container">
+      <!-- Perfumes generados por JS -->
+    </div>
+  </section>
+
+  <!-- 4. MODAL DE NOTAS Y COMPRA -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h3 class="modal-title" id="modal-title">Velours Rose</h3>
+      <p class="modal-subtitle" id="modal-subtitle">Eau de Parfum</p>
+      
+      <div class="notes-box">
+        <div class="note-row">
+          <span class="note-label">Notas de Salida</span>
+          <span class="note-value" id="modal-top-notes">-</span>
+        </div>
+        <div class="note-row">
+          <span class="note-label">Notas de Corazón</span>
+          <span class="note-value" id="modal-heart-notes">-</span>
+        </div>
+        <div class="note-row">
+          <span class="note-label">Notas de Fondo</span>
+          <span class="note-value" id="modal-base-notes">-</span>
+        </div>
+      </div>
+
+      <button class="btn-buy" onclick="handleBuy()">Comprar Ahora</button>
+    </div>
+  </div>
+
+  <!-- Notificación Toast -->
+  <div class="toast" id="toast-msg">¡Producto añadido al carrito!</div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    const perfumes = [
+      {
+        id: 1,
+        name: "Velours Celeste",
+        tagline: "Brisa Cristalina & Lirios",
+        color: "#4A7C96",
+        bottleBg: "#E2F1F8",
+        top: "Bergamota de Calabria, Brisa Marina",
+        heart: "Lirio del Valle, Pétalos de Peonía",
+        base: "Almizcle Blanco, Sándalo Claro"
+      },
+      {
+        id: 2,
+        name: "Velours Rosé",
+        tagline: "Dulzura de Peonías & Terciopelo",
+        color: "#F4ACB7",
+        bottleBg: "#FDE2E4",
+        top: "Frambuesa Silvestre, Mandarina Rosa",
+        heart: "Rosa Centifolia, Esencia de Peonía",
+        base: "Vainilla Bourbon, Ámbar Suave"
+      },
+      {
+        id: 3,
+        name: "Velours Lila",
+        tagline: "Misterio Nocturno & Lavanda",
+        color: "#7C5295",
+        bottleBg: "#EBDCF9",
+        top: "Lavanda Francesa, Flor de Azahar",
+        heart: "Violeta Silvestre, Iris de Toscana",
+        base: "Habia Tonka, Madera de Cedro"
+      },
+      {
+        id: 4,
+        name: "Velours d'Or",
+        tagline: "Resplandor Ámbar & Destellos",
+        color: "#D4AF37",
+        bottleBg: "#FEF5D9",
+        top: "Flor de Naranjo, Pera Dorada",
+        heart: "Jazmín Sambac, Miel Cristalizada",
+        base: "Ámbar Dorado, Resina de Benzoin"
+      }
+    ];
+
+    let currentPerfume = null;
+
+    // 1. Animación del Lirio al cargar
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const loader = document.getElementById('loader-screen');
+        loader.classList.add('fade-out');
+      }, 3500);
+    });
+
+    // 2. Cambio de vista
+    function switchView(viewName) {
+      const views = document.querySelectorAll('.view-section');
+      views.forEach(v => v.classList.remove('active'));
+
+      if (viewName === 'home') {
+        document.getElementById('home-view').classList.add('active');
+      } else if (viewName === 'catalog') {
+        document.getElementById('catalog-view').classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 3. Renderizado del Catálogo
+    function renderCatalog() {
+      const container = document.getElementById('catalog-container');
+      container.innerHTML = perfumes.map(p => `
+        <div class="product-card">
+          <svg class="bottle-illustration" viewBox="0 0 100 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="35" y="10" width="30" height="15" rx="3" fill="${p.color}" opacity="0.7"/>
+            <rect x="42" y="25" width="16" height="10" fill="#D4AF37"/>
+            <path d="M20 50C20 38 35 35 50 35C65 35 80 38 80 50V105C80 115 65 120 50 120C35 120 20 115 20 105V50Z" fill="${p.bottleBg}" stroke="${p.color}" stroke-width="2"/>
+            <circle cx="50" cy="75" r="12" fill="#FFFFFF" stroke="#D4AF37" stroke-width="1"/>
+            <text x="50" y="78" font-family="Cormorant Garamond" font-size="7" fill="${p.color}" text-anchor="middle">V</text>
+          </svg>
+          <h3 class="product-name">${p.name}</h3>
+          <p class="product-tagline">${p.tagline}</p>
+          <button class="btn-secondary" onclick="openModal(${p.id})">Ver Producto</button>
+        </div>
+      `).join('');
+    }
+
+    // 4. Modal
+    function openModal(id) {
+      currentPerfume = perfumes.find(p => p.id === id);
+      if (!currentPerfume) return;
+
+      document.getElementById('modal-title').innerText = currentPerfume.name;
+      document.getElementById('modal-top-notes').innerText = currentPerfume.top;
+      document.getElementById('modal-heart-notes').innerText = currentPerfume.heart;
+      document.getElementById('modal-base-notes').innerText = currentPerfume.base;
+
+      document.getElementById('product-modal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('product-modal').classList.remove('active');
+    }
+
+    // 5. Botón Comprar
+    function handleBuy() {
+      closeModal();
+      const toast = document.getElementById('toast-msg');
+      toast.innerText = `¡Gracias por elegir ${currentPerfume ? currentPerfume.name : 'Velours'}! Redirigiendo a pago...`;
+      toast.classList.add('show');
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    renderCatalog();
+  </script>
+</body>
+</html>
