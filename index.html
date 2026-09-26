@@ -3,707 +3,493 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Velours - Haute Parfumerie</title>
+  <title>Velours - Alta Perfumería</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --lila-soft: #ebdcf9;
-      --lila-deep: #7c5299;
-      --rosa-soft: #fde2e4;
-      --rosa-accent: #f0acb7;
-      --celeste-soft: #e2f1f8;
-      --celeste-deep: #4a7c96;
-      --gold-accent: #d4af37;
-      --text-dark: #2c2530;
-      --bg-light: #fcfbfe;
+      --borgona-profundo: #4A0E17;
+      --rojo-vino: #721121;
+      --rosa-suave: #F4C2C2;
+      --rosa-claro: #FDEDEC;
+      --dorado: #D4AF37;
+      --texto-oscuro: #2C080C;
+      --blanco: #FFFFFF;
     }
 
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
     body {
       font-family: 'Montserrat', sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-dark);
-      line-height: 1.6;
+      background-color: var(--rosa-claro);
+      color: var(--texto-oscuro);
       overflow-x: hidden;
-      position: relative;
     }
 
-    /* Animación de caída de pétalos de cerezo */
-    .sakura {
+    /* PANTALLA DE CARGA (LIRIO FLORECIENDO) */
+    #lily-loader {
       position: fixed;
-      top: -10px;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: radial-gradient(circle, var(--rojo-vino) 0%, var(--borgona-profundo) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       z-index: 9999;
-      pointer-events: none;
-      background-color: #ffb7c5;
-      border-radius: 100% 0 100% 0;
-      opacity: 0.7;
-      animation: fall linear infinite;
+      transition: opacity 1.2s ease, visibility 1.2s ease;
     }
 
-    @keyframes fall {
+    .lily-svg {
+      width: 180px;
+      height: 180px;
+    }
+
+    .petal {
+      fill: var(--rosa-suave);
+      transform-origin: center bottom;
+      animation: bloom 3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      opacity: 0.9;
+    }
+
+    .petal-center {
+      fill: var(--rojo-vino);
+      transform-origin: center bottom;
+      animation: bloom 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .pistil {
+      stroke: var(--dorado);
+      stroke-width: 3;
+      stroke-dasharray: 50;
+      stroke-dashoffset: 50;
+      animation: pistilGrow 2s 1.5s ease forwards;
+    }
+
+    @keyframes bloom {
       0% {
-        opacity: 0.8;
-        transform: translateY(0) rotate(0deg) translateX(0);
-      }
-      50% {
-        transform: translateY(50vh) rotate(180deg) translateX(50px);
+        transform: scale(0.1) rotate(0deg);
+        opacity: 0.2;
       }
       100% {
-        opacity: 0;
-        transform: translateY(100vh) rotate(360deg) translateX(-50px);
+        transform: scale(1) rotate(var(--rot, 0deg));
+        opacity: 0.95;
       }
     }
 
-    header {
-      text-align: center;
-      padding: 3rem 1rem 2rem;
-      background: linear-gradient(135deg, var(--lila-soft), var(--celeste-soft));
+    @keyframes pistilGrow {
+      to {
+        stroke-dashoffset: 0;
+      }
     }
 
-    h1 {
+    .loader-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 3.2rem;
-      letter-spacing: 5px;
-      color: var(--lila-deep);
-      text-transform: uppercase;
-      margin-bottom: 0.3rem;
+      color: var(--rosa-suave);
+      font-size: 2.2rem;
+      letter-spacing: 4px;
+      margin-top: 25px;
+      opacity: 0;
+      animation: fadeInText 2s 1s forwards;
     }
 
-    p.subtitle {
-      font-style: italic;
-      color: #666;
-      font-size: 1.1rem;
+    @keyframes fadeInText {
+      to { opacity: 1; }
     }
 
-    /* Índice / Navegación */
-    nav {
+    /* ESTILOS DE NAVEGACIÓN Y PORTADA */
+    header {
+      background-color: var(--borgona-profundo);
+      color: var(--rosa-suave);
+      padding: 20px 40px;
       display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 1.8rem;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      letter-spacing: 3px;
+      color: var(--rosa-suave);
     }
 
     nav a {
+      color: var(--rosa-suave);
       text-decoration: none;
-      color: var(--lila-deep);
+      margin-left: 25px;
       font-weight: 500;
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      transition: color 0.3s ease;
-      padding: 0.3rem 0.8rem;
-      border-radius: 15px;
+      transition: color 0.3s;
     }
 
     nav a:hover {
-      color: var(--gold-accent);
-      background-color: rgba(255, 255, 255, 0.5);
+      color: var(--dorado);
     }
 
-    .container {
-      max-width: 1200px;
+    .hero {
+      background: linear-gradient(135deg, var(--borgona-profundo), var(--rojo-vino));
+      color: var(--blanco);
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .hero h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      color: var(--rosa-suave);
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      color: var(--rosa-claro);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: var(--rosa-suave);
+      color: var(--borgona-profundo);
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: var(--dorado);
+      color: var(--blanco);
+    }
+
+    /* CATÁLOGO DE PRODUCTOS */
+    .catalog {
+      padding: 80px 40px;
+      max-width: 1300px;
       margin: 0 auto;
-      padding: 3rem 1.5rem;
     }
 
-    .section-title {
+    .catalog h3 {
       text-align: center;
       font-family: 'Cormorant Garamond', serif;
-      font-size: 2.4rem;
-      color: var(--lila-deep);
-      margin-bottom: 2.5rem;
-      position: relative;
+      font-size: 2.8rem;
+      color: var(--borgona-profundo);
+      margin-bottom: 50px;
     }
 
-    .section-title::after {
-      content: '';
-      display: block;
-      width: 60px;
-      height: 2px;
-      background-color: var(--gold-accent);
-      margin: 0.5rem auto 0;
-    }
-
-    /* Grid de Productos */
-    .product-grid {
+    .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
+      gap: 30px;
     }
 
-    .product-card {
-      background: #ffffff;
+    .card {
+      background-color: var(--blanco);
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1.5rem;
-      text-align: center;
-      border: 1px solid #f0e6f7;
-    }
-
-    .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 25px rgba(0,0,0,0.08);
-    }
-
-    .product-image-container {
-      width: 100%;
-      height: 260px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 1.2rem;
-      overflow: hidden;
-      border-radius: 8px;
-    }
-
-    .product-image-container img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+      box-shadow: 0 10px 20px rgba(114, 17, 33, 0.1);
+      border: 1px solid var(--rosa-suave);
       transition: transform 0.3s ease;
+      text-align: center;
+      padding-bottom: 25px;
     }
 
-    .product-card:hover .product-image-container img {
-      transform: scale(1.05);
+    .card:hover {
+      transform: translateY(-8px);
     }
 
-    .product-title {
+    .card img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      background-color: #FAFAFA;
+    }
+
+    .card h4 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
+      color: var(--borgona-profundo);
+      margin: 15px 0 5px;
+    }
+
+    .card p {
+      color: var(--rojo-vino);
+      font-size: 0.9rem;
+      padding: 0 15px;
+      margin-bottom: 15px;
+    }
+
+    .card .price {
       font-weight: 600;
-      color: var(--text-dark);
-      margin-bottom: 0.4rem;
-    }
-
-    .product-desc {
-      font-size: 0.88rem;
-      color: #666;
-      margin-bottom: 0.5rem;
-      flex-grow: 1;
-    }
-
-    .product-scents {
-      font-size: 0.8rem;
-      font-style: italic;
-      color: var(--lila-deep);
-      margin-bottom: 1rem;
-    }
-
-    .product-price {
-      font-weight: 600;
-      color: var(--lila-deep);
-      font-size: 1.15rem;
-      margin-bottom: 1rem;
-    }
-
-    .btn-buy {
-      background-color: var(--lila-deep);
-      color: #ffffff;
-      border: none;
-      padding: 0.6rem 1.4rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      text-transform: uppercase;
-    }
-
-    .btn-buy:hover {
-      background-color: #5c3a73;
-    }
-
-    /* Secciones Adicionales */
-    .about-section, .contact-section {
-      background: #ffffff;
-      padding: 3rem 2rem;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.03);
-      margin-top: 4rem;
-      border: 1px solid #f0e6f7;
-    }
-
-    .about-content {
-      max-width: 800px;
-      margin: 0 auto;
-      text-align: center;
-      font-size: 1rem;
-      color: #555;
-      line-height: 1.8;
-    }
-
-    .contact-container {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .phone-info {
-      text-align: center;
-      margin-bottom: 1.5rem;
+      color: var(--borgona-profundo);
       font-size: 1.1rem;
-      color: var(--lila-deep);
-      font-weight: 500;
-    }
-
-    .form-group {
-      margin-bottom: 1.2rem;
-      text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 500;
-      margin-bottom: 0.4rem;
-      color: var(--text-dark);
-    }
-
-    .form-group input, .form-group textarea {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.3s ease;
-    }
-
-    .form-group input:focus, .form-group textarea:focus {
-      border-color: var(--lila-deep);
-    }
-
-    .btn-submit {
-      width: 100%;
-      background-color: var(--lila-deep);
-      color: #ffffff;
-      border: none;
-      padding: 0.8rem;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      letter-spacing: 1px;
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: background-color 0.3s ease;
-    }
-
-    .btn-submit:hover {
-      background-color: #5c3a73;
     }
 
     footer {
+      background-color: var(--borgona-profundo);
+      color: var(--rosa-suave);
       text-align: center;
-      padding: 2rem;
-      background-color: #f3edf9;
-      font-size: 0.85rem;
-      color: #777;
-      margin-top: 5rem;
+      padding: 30px;
+      margin-top: 50px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Encabezado con Índice -->
+  <!-- ANIMACIÓN LIRIO DE CARGA -->
+  <div id="lily-loader">
+    <svg class="lily-svg" viewBox="0 0 200 200">
+      <path class="petal" style="--rot: 0deg;" d="M100,100 Q80,40 100,10 Q120,40 100,100"/>
+      <path class="petal" style="--rot: 60deg;" d="M100,100 Q80,40 100,10 Q120,40 100,100"/>
+      <path class="petal" style="--rot: 120deg;" d="M100,100 Q80,40 100,10 Q120,40 100,100"/>
+      <path class="petal" style="--rot: 180deg;" d="M100,100 Q80,40 100,10 Q120,40 100,100"/>
+      <path class="petal" style="--rot: 240deg;" d="M100,100 Q80,40 100,10 Q120,40 100,100"/>
+      <path class="petal" style="--rot: 300deg;" d="M100,100 Q80,40 100,10 Q120,40 100,100"/>
+
+      <path class="petal-center" style="--rot: 30deg;" d="M100,100 Q88,55 100,30 Q112,55 100,100"/>
+      <path class="petal-center" style="--rot: 90deg;" d="M100,100 Q88,55 100,30 Q112,55 100,100"/>
+      <path class="petal-center" style="--rot: 150deg;" d="M100,100 Q88,55 100,30 Q112,55 100,100"/>
+      <path class="petal-center" style="--rot: 210deg;" d="M100,100 Q88,55 100,30 Q112,55 100,100"/>
+      <path class="petal-center" style="--rot: 270deg;" d="M100,100 Q88,55 100,30 Q112,55 100,100"/>
+      <path class="petal-center" style="--rot: 330deg;" d="M100,100 Q88,55 100,30 Q112,55 100,100"/>
+
+      <line class="pistil" x1="100" y1="100" x2="100" y2="40" />
+      <line class="pistil" x1="100" y1="100" x2="70" y2="55" />
+      <line class="pistil" x1="100" y1="100" x2="130" y2="55" />
+    </svg>
+    <h1 class="loader-title">VELOURS</h1>
+  </div>
+
   <header>
     <h1>Velours</h1>
-    <p class="subtitle">Haute Parfumerie & Essence Élégante</p>
     <nav>
-      <a href="#conocenos">Conócenos</a>
-      <a href="#productos">Productos</a>
+      <a href="#inicio">Inicio</a>
+      <a href="#coleccion">Colección</a>
       <a href="#contacto">Contacto</a>
     </nav>
   </header>
 
-  <main class="container">
-    
-    <!-- Sección Conócenos -->
-    <section id="conocenos" class="about-section">
-      <h2 class="section-title">Conócenos</h2>
-      <div class="about-content">
-        <p>En <strong>Velours</strong> transformamos la magia de los aromas en un arte eterno. Cada una de nuestras fragancias es concebida como una obra maestra en cristal, elaborada minuciosamente con ingredientes botánicos finos, extractos florales puros y matices exóticos.</p>
-        <p>Nuestra misión es envolver tu aura en una sofisticación sutil, creando recuerdos olfativos inolvidables que acompañen cada momento de tu vida con elegancia y distinción.</p>
+  <section class="hero" id="inicio">
+    <h2>Elegancia en Cada Gota</h2>
+    <p>Descubre nuestra exclusiva colección de 30 fragancias únicas inspiradas en lirios, flores nobles y aromas preciosos.</p>
+    <a href="#coleccion" class="btn">Explorar Colección</a>
+  </section>
+
+  <section class="catalog" id="coleccion">
+    <h3>Colección Exclusiva (30 Fragancias)</h3>
+    <div class="grid">
+      
+      <!-- 1 a 10 -->
+      <div class="card">
+        <img src="perfumes1.jpg" alt="Velours Perfume 1">
+        <h4>Pompon Rose</h4>
+        <p>Bomba atomizadora vintage con esencia de rosa fresca.</p>
+        <span class="price">$85.00</span>
       </div>
-    </section>
-
-    <!-- Sección Productos (30 ítems) -->
-    <section id="productos" style="margin-top: 4rem;">
-      <h2 class="section-title">Nuestros Productos</h2>
-
-      <div class="product-grid">
-        
-        <!-- Producto 1 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume1.jpg" alt="Rosé Vintage"></div>
-          <h3 class="product-title">Rosé Vintage</h3>
-          <p class="product-desc">Frasco de cristal labrado con atomizador de borla en tono rosa pastel.</p>
-          <p class="product-scents"><strong>Olores:</strong> Rosa silvestre, peonía dulce y almizcle blanco.</p>
-          <span class="product-price">$120.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 2 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume2.jpg" alt="Fleur Royale"></div>
-          <h3 class="product-title">Fleur Royale</h3>
-          <p class="product-desc">Diseño esculpido en forma de flor transparente con finos destellos dorados.</p>
-          <p class="product-scents"><strong>Olores:</strong> Jazmín de noche, flor de azahar y notas amaderadas.</p>
-          <span class="product-price">$145.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 3 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume3.jpg" alt="Sirène Celeste"></div>
-          <h3 class="product-title">Sirène Celeste</h3>
-          <p class="product-desc">Edición marina con concha acanalada, lazo celeste satinado y detalles de perlas.</p>
-          <p class="product-scents"><strong>Olores:</strong> Brisa marina, lirio de agua y bergamota fresca.</p>
-          <span class="product-price">$160.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 4 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume4.jpg" alt="Rose Élégance"></div>
-          <h3 class="product-title">Rose Élégance</h3>
-          <p class="product-desc">Diseño esférico con relieves florales magenta y tapón grabado en oro.</p>
-          <p class="product-scents"><strong>Olores:</strong> Rosas búlgaras, frambuesa silvestre y flor de loto.</p>
-          <span class="product-price">$135.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 5 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume5.jpg" alt="Moondance Soft"></div>
-          <h3 class="product-title">Moondance Soft</h3>
-          <p class="product-desc">Frasco estilo vintage con estampado de rosas victorianas y un gran lazo cremoso.</p>
-          <p class="product-scents"><strong>Olores:</strong> Vainilla de Madagascar, crema de almendras y capullos de rosa.</p>
-          <span class="product-price">$150.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 6 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume6.jpg" alt="Papillon Enchanté"></div>
-          <h3 class="product-title">Papillon Enchanté</h3>
-          <p class="product-desc">Cúpula de cristal ilustrada con mariposas botánicas y lirios silvestres.</p>
-          <p class="product-scents"><strong>Olores:</strong> Lirios del valle, té verde, lavanda y mandarina verde.</p>
-          <span class="product-price">$130.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 7 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume7.jpg" alt="Monarque D'Or"></div>
-          <h3 class="product-title">Monarque D'Or</h3>
-          <p class="product-desc">Frasco esmerilado con detalles dorados y una mariposa de cristal en la corona.</p>
-          <p class="product-scents"><strong>Olores:</strong> Ámbar dorado, orquídea rosa y néctar de melocotón.</p>
-          <span class="product-price">$175.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 8 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume8.jpg" alt="Lunaire Magic"></div>
-          <h3 class="product-title">Lunaire Magic</h3>
-          <p class="product-desc">Diseño circular transparente con relieves de medialunas rosadas y piedras estelares.</p>
-          <p class="product-scents"><strong>Olores:</strong> Violetas nocturnas, pera confitada y polvo de iris.</p>
-          <span class="product-price">$140.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 9 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume9.jpg" alt="Lotus Améthyste"></div>
-          <h3 class="product-title">Lotus Améthyste</h3>
-          <p class="product-desc">Escultura de cristal tallado en forma de flor de loto con tonalidades violeta iridiscente.</p>
-          <p class="product-scents"><strong>Olores:</strong> Loto púrpura, grosella negra y sándalo refinado.</p>
-          <span class="product-price">$185.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 10 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume10.jpg" alt="Serpent Précieux"></div>
-          <h3 class="product-title">Serpent Précieux</h3>
-          <p class="product-desc">Frasco envuelto en una joya en forma de serpiente engastada en cristales rosa.</p>
-          <p class="product-scents"><strong>Olores:</strong> Pachulí exótico, pimienta rosa y haba tonka intemporal.</p>
-          <span class="product-price">$195.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 11 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume11.jpg" alt="Montgolfière d'Or"></div>
-          <h3 class="product-title">Montgolfière d'Or</h3>
-          <p class="product-desc">Estructura metálica dorada que emula un globo aerostático sosteniendo el perfume.</p>
-          <p class="product-scents"><strong>Olores:</strong> Flor de cerezo, magnolias y algodón de azúcar suave.</p>
-          <span class="product-price">$165.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 12 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume12.jpg" alt="Siren Royal"></div>
-          <h3 class="product-title">Siren Royal</h3>
-          <p class="product-desc">Botella en tono verde menta coronada con una sirena dorada tallada a mano.</p>
-          <p class="product-scents"><strong>Olores:</strong> Algas marinas finas, sal de mar y flor de neroli.</p>
-          <span class="product-price">$170.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 13 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume13.jpg" alt="Étoile Brillante"></div>
-          <h3 class="product-title">Étoile Brillante</h3>
-          <p class="product-desc">Cuerpo geométrico en forma de estrella con un acabado holográfico iridiscente.</p>
-          <p class="product-scents"><strong>Olores:</strong> Cítricos luminosos, casis y destellos de vainilla dulce.</p>
-          <span class="product-price">$125.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 14 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume14.jpg" alt="Goutte d'Océan"></div>
-          <h3 class="product-title">Goutte d'Océan</h3>
-          <p class="product-desc">Frasco ovalado en tono turquesa cristalino adornado con un dije de filigrana dorada.</p>
-          <p class="product-scents"><strong>Olores:</strong> Agua de coco, flor de tiare y maderas del océano.</p>
-          <span class="product-price">$130.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 15 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume15.jpg" alt="Aura Célestiale"></div>
-          <h3 class="product-title">Aura Célestiale</h3>
-          <p class="product-desc">Cuerpo de cristal opalino con reflejos iridiscentes e incrustaciones doradas.</p>
-          <p class="product-scents"><strong>Olores:</strong> Flor de saúco, pomelo rosado y almizcle solar.</p>
-          <span class="product-price">$140.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 16 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume16.jpg" alt="Velours Nocturne"></div>
-          <h3 class="product-title">Velours Nocturne</h3>
-          <p class="product-desc">Botella en tono violeta profundo recubierta de un patrón aterciopelado.</p>
-          <p class="product-scents"><strong>Olores:</strong> Ciruela negra, orquídea nocturna y madera de cachemira.</p>
-          <span class="product-price">$155.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 17 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume17.jpg" alt="Jardin de Soie"></div>
-          <h3 class="product-title">Jardin de Soie</h3>
-          <p class="product-desc">Diseño cilíndrico de porcelana suave con grabados de ramas en flor de cerezo.</p>
-          <p class="product-scents"><strong>Olores:</strong> Sakura, té de jazmín y durazno blanco.</p>
-          <span class="product-price">$135.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 18 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume18.jpg" alt="Soleil d'Albâtre"></div>
-          <h3 class="product-title">Soleil d'Albâtre</h3>
-          <p class="product-desc">Frasco esculpido en alabrastro blanco con broche central dorada brillante.</p>
-          <p class="product-scents"><strong>Olores:</strong> Frangipani, flor de naranjo y néctar de miel de azahar.</p>
-          <span class="product-price">$165.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 19 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume19.jpg" alt="Élixir Imperial"></div>
-          <h3 class="product-title">Élixir Imperial</h3>
-          <p class="product-desc">Diseño ambarino de alta simetría con relieve real y corona bañado en bronce.</p>
-          <p class="product-scents"><strong>Olores:</strong> Ámbar gris, azafrán, cedro y vainilla bourbon.</p>
-          <span class="product-price">$180.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 20 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume20.jpg" alt="Rêve de Glace"></div>
-          <h3 class="product-title">Rêve de Glace</h3>
-          <p class="product-desc">Frasco facetado que imita un bloque de hielo cristalino con destellos azules.</p>
-          <p class="product-scents"><strong>Olores:</strong> Menta helada, lirio ártico y almizcle de nieve.</p>
-          <span class="product-price">$128.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 21 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume21.jpg" alt="Rosée du Matin"></div>
-          <h3 class="product-title">Rosée du Matin</h3>
-          <p class="product-desc">Diseño en forma de gota de rocío con degradado suave en pastel rosa y verde.</p>
-          <p class="product-scents"><strong>Olores:</strong> Hojas de té verde, hierba fresca y capullos de rosa de mayo.</p>
-          <span class="product-price">$122.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 22 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume22.jpg" alt="Fleur de Cacao"></div>
-          <h3 class="product-title">Fleur de Cacao</h3>
-          <p class="product-desc">Frasco tono chocolate dorado con tapón en forma de vaina tallada.</p>
-          <p class="product-scents"><strong>Olores:</strong> Cacao tostado, flor de orquídea, canela y haba tonka.</p>
-          <span class="product-price">$142.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 23 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume23.jpg" alt="Brise de Ciel"></div>
-          <h3 class="product-title">Brise de Ciel</h3>
-          <p class="product-desc">Envase cilíndrico en tono azul celeste con tapa en filigrana de plata.</p>
-          <p class="product-scents"><strong>Olores:</strong> Aire puro de montaña, lavanda fina y flor de freesia.</p>
-          <span class="product-price">$138.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 24 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume24.jpg" alt="Lumière d'Ambre"></div>
-          <h3 class="product-title">Lumière d'Ambre</h3>
-          <p class="product-desc">Frasco geométrico con tonos miel y cálidos reflejos dorados.</p>
-          <p class="product-scents"><strong>Olores:</strong> Resina de ámbar, benjuí, flor de tiaré y bergamota.</p>
-          <span class="product-price">$152.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 25 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume25.jpg" alt="Charme de Lavande"></div>
-          <h3 class="product-title">Charme de Lavande</h3>
-          <p class="product-desc">Botella de vidrio lila esmerilado con moño de encaje artesanal.</p>
-          <p class="product-scents"><strong>Olores:</strong> Lavanda provenzal, romero suave y crema de leche.</p>
-          <span class="product-price">$118.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 26 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume26.jpg" alt="Perle d'Orient"></div>
-          <h3 class="product-title">Perle d'Orient</h3>
-          <p class="product-desc">Frasco esférico en tono blanco perlado con aro de gemas rosadas.</p>
-          <p class="product-scents"><strong>Olores:</strong> Flor de loto oriental, té blanco y madera de sándalo.</p>
-          <span class="product-price">$168.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 27 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume27.jpg" alt="Velours Espiègle"></div>
-          <h3 class="product-title">Velours Espiègle</h3>
-          <p class="product-desc">Diseño juvenil en tono coral con atomizador rosa chillón y detalles brillantes.</p>
-          <p class="product-scents"><strong>Olores:</strong> Cerezos en flor, frambuesa jugosa y caramelo suave.</p>
-          <span class="product-price">$115.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 28 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume28.jpg" alt="Symphonie Florale"></div>
-          <h3 class="product-title">Symphonie Florale</h3>
-          <p class="product-desc">Frasco octagonal transparente con grabados de un ramo de flores variado.</p>
-          <p class="product-scents"><strong>Olores:</strong> Magnolia, hortensia, azucena y un toque de almizcle.</p>
-          <span class="product-price">$148.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 29 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume29.jpg" alt="Nuit de Bohème"></div>
-          <h3 class="product-title">Nuit de Bohème</h3>
-          <p class="product-desc">Diseño vintage borgoña adornado con cadenas doradas y pedrería sutil.</p>
-          <p class="product-scents"><strong>Olores:</strong> Grosella negra, rosa oscura, incienso y pino dulce.</p>
-          <span class="product-price">$172.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
-        <!-- Producto 30 -->
-        <article class="product-card">
-          <div class="product-image-container"><img src="perfume30.jpg" alt="Pureté de Lierre"></div>
-          <h3 class="product-title">Pureté de Lierre</h3>
-          <p class="product-desc">Frasco minimalista transparente envuelto en relieves de hojas de hiedra verde.</p>
-          <p class="product-scents"><strong>Olores:</strong> Hiedra verde, flor de loto blanco y agua purificada.</p>
-          <span class="product-price">$125.00</span>
-          <button class="btn-buy">Descubrir</button>
-        </article>
-
+      <div class="card">
+        <img src="perfumes2.jpg" alt="Velours Perfume 2">
+        <h4>Fleur Cristal</h4>
+        <p>Frasco tallado con tapón de flor cristalina pura.</p>
+        <span class="price">$92.00</span>
       </div>
-    </section>
-
-    <!-- Sección Contacto -->
-    <section id="contacto" class="contact-section">
-      <h2 class="section-title">Contacto</h2>
-      <p class="phone-info">📞 Atención al cliente & Asesoría: <strong>+502 2345-6789</strong></p>
-      <div class="contact-container">
-        <form action="#" method="post" onsubmit="event.preventDefault();">
-          <div class="form-group">
-            <label for="nombre">Nombre Completo</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre..." required>
-          </div>
-          <div class="form-group">
-            <label for="email">Correo Electrónico</label>
-            <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
-          </div>
-          <div class="form-group">
-            <label for="mensaje">Mensaje</label>
-            <textarea id="mensaje" name="mensaje" rows="4" placeholder="¿En qué podemos ayudarte?" required></textarea>
-          </div>
-          <button type="submit" class="btn-submit">Enviar Mensaje</button>
-        </form>
+      <div class="card">
+        <img src="perfumes3.jpg" alt="Velours Perfume 3">
+        <h4>Coquille Celeste</h4>
+        <p>Diseño de concha marina con detalles celestes y moño.</p>
+        <span class="price">$98.00</span>
       </div>
-    </section>
+      <div class="card">
+        <img src="perfumes4.jpg" alt="Velours Perfume 4">
+        <h4>Rose Dorée</h4>
+        <p>Esférico rosa con grabados florales en tono oro.</p>
+        <span class="price">$105.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes5.jpg" alt="Velours Perfume 5">
+        <h4>Moondance Velvet</h4>
+        <p>Aroma romántico en envase floral con lazo beige.</p>
+        <span class="price">$89.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes6.jpg" alt="Velours Perfume 6">
+        <h4>Jardin Papillon</h4>
+        <p>Ilustración de mariposa sobre jardín primaveral.</p>
+        <span class="price">$87.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes7.jpg" alt="Velours Perfume 7">
+        <h4>Monarque Rose</h4>
+        <p>Envase esmerilado con mariposa dorada y detalles rosas.</p>
+        <span class="price">$115.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes8.jpg" alt="Velours Perfume 8">
+        <h4>Luna Park</h4>
+        <p>Diseño celestial de luna y estrellas destellantes.</p>
+        <span class="price">$94.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes9.jpg" alt="Velours Perfume 9">
+        <h4>Lotus Violette</h4>
+        <p>Base tallada en forma de flor de loto violeta.</p>
+        <span class="price">$110.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes10.jpg" alt="Velours Perfume 10">
+        <h4>Serpent Éblouissant</h4>
+        <p>Frasco rosa con serpiente enjoyada de cristales.</p>
+        <span class="price">$130.00</span>
+      </div>
 
-  </main>
+      <!-- 11 a 20 -->
+      <div class="card">
+        <img src="perfumes11.jpg" alt="Velours Perfume 11">
+        <h4>Montgolfière D'Or</h4>
+        <p>Frasco en forma de globo aerostático dorado.</p>
+        <span class="price">$120.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes12.jpg" alt="Velours Perfume 12">
+        <h4>Sirène Emeraude</h4>
+        <p>Aroma marino con sirena dorada sobre frasco verde.</p>
+        <span class="price">$118.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes13.jpg" alt="Velours Perfume 13">
+        <h4>Étoile Iridiscente</h4>
+        <p>Diseño de estrella con reflejos iridiscentes.</p>
+        <span class="price">$88.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes14.jpg" alt="Velours Perfume 14">
+        <h4>Goutte Bleue</h4>
+        <p>Frasco azul turquesa en forma de gota con dije.</p>
+        <span class="price">$95.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes15.jpg" alt="Velours Perfume 15">
+        <h4>Lotus Bleu Bloom</h4>
+        <p>Fragancia inspirada en la flor de loto azul mística.</p>
+        <span class="price">$108.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes16.jpg" alt="Velours Perfume 16">
+        <h4>Filigrane Améthyste</h4>
+        <p>Cristal morado con adorno de filigrana dorada.</p>
+        <span class="price">$102.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes17.jpg" alt="Velours Perfume 17">
+        <h4>Fleur de Cerisier</h4>
+        <p>Cerezo en flor con corona de pétalos rosados.</p>
+        <span class="price">$125.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes18.jpg" alt="Velours Perfume 18">
+        <h4>Éclat Solaire</h4>
+        <p>Destellos de oro con tapón en forma de corona solar.</p>
+        <span class="price">$115.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes19.jpg" alt="Velours Perfume 19">
+        <h4>Couronne Royale</h4>
+        <p>Diseño imperial con tapón de corona real vino y oro.</p>
+        <span class="price">$140.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes20.jpg" alt="Velours Perfume 20">
+        <h4>Flocon d'Hiver</h4>
+        <p>Frasco helado azul con grabados de copos de nieve.</p>
+        <span class="price">$96.00</span>
+      </div>
 
-  <footer>
-    <p>&copy; 2026 Velours Parfums. Todos los derechos reservados.</p>
+      <!-- 21 a 30 -->
+      <div class="card">
+        <img src="perfumes21.jpg" alt="Velours Perfume 21">
+        <h4>Poussière de Rose</h4>
+        <p>Vidrio rosa con brillo mágico y corona barroca.</p>
+        <span class="price">$110.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes22.jpg" alt="Velours Perfume 22">
+        <h4>Écorce Precieuse</h4>
+        <p>Textura artesanal de maderas nobles y pan de oro.</p>
+        <span class="price">$135.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes23.jpg" alt="Velours Perfume 23">
+        <h4>Bleu Impérial</h4>
+        <p>Cilindro azul cobalto con patrones dorados de lujo.</p>
+        <span class="price">$105.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes24.jpg" alt="Velours Perfume 24">
+        <h4>Cœur d'Ambre</h4>
+        <p>Tallado faceteado en forma de corazón ámbar.</p>
+        <span class="price">$112.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes25.jpg" alt="Velours Perfume 25">
+        <h4>Libellule de Lilas</h4>
+        <p>Detalles de libélula y flores de lilas en relieve.</p>
+        <span class="price">$128.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes26.jpg" alt="Velours Perfume 26">
+        <h4>Perle de Soie</h4>
+        <p>Frasco perlado con incrustaciones de perlas rosadas.</p>
+        <span class="price">$119.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes27.jpg" alt="Velours Perfume 27">
+        <h4>Pompon Vintage</h4>
+        <p>Frasco clásico de diamantes con borla en hilo rosa.</p>
+        <span class="price">$89.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes28.jpg" alt="Velours Perfume 28">
+        <h4>Lumière Vérité</h4>
+        <p>Tapón en forma de lirio de cristal de alta costura.</p>
+        <span class="price">$150.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes29.jpg" alt="Velours Perfume 29">
+        <h4>Hibiscus Pourpre</h4>
+        <p>Esencia de hibisco rojo sobre cristal en relieve.</p>
+        <span class="price">$105.00</span>
+      </div>
+      <div class="card">
+        <img src="perfumes30.jpg" alt="Velours Perfume 30">
+        <h4>Émeraude Botanique</h4>
+        <p>Frasco verde esmeralda rodeado de follaje dorado.</p>
+        <span class="price">$122.00</span>
+      </div>
+
+    </div>
+  </section>
+
+  <footer id="contacto">
+    <p>&copy; 2026 Velours Perfumes - Todos los derechos reservados.</p>
   </footer>
 
-  <!-- Script para la lluvia de hojas de cerezo (Sakura) -->
   <script>
-    function createSakura() {
-      const sakura = document.createElement('div');
-      sakura.classList.add('sakura');
-      
-      // Tamaño aleatorio para variedad visual
-      const size = Math.random() * 8 + 8;
-      sakura.style.width = `${size}px`;
-      sakura.style.height = `${size + 4}px`;
-      
-      // Posición horizontal aleatoria
-      sakura.style.left = Math.random() * 100 + 'vw';
-      
-      // Duración de la caída aleatoria
-      const duration = Math.random() * 3 + 4;
-      sakura.style.animationDuration = `${duration}s`;
-      
-      document.body.appendChild(sakura);
-      
+    window.addEventListener('load', () => {
       setTimeout(() => {
-        sakura.remove();
-      }, duration * 1000);
-    }
-
-    // Generar pétalos continuamente a ritmo leve
-    setInterval(createSakura, 350);
+        const loader = document.getElementById('lily-loader');
+        loader.style.opacity = '0';
+        loader.style.visibility = 'hidden';
+      }, 3500);
+    });
   </script>
-
 </body>
 </html>
