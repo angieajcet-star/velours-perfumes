@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Velours - Alta Perfumería</title>
+  <!-- Fuentes elegantes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -25,6 +26,10 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: 'Montserrat', sans-serif;
       background-color: var(--rosa-claro);
@@ -32,7 +37,9 @@
       overflow-x: hidden;
     }
 
-    /* PANTALLA DE CARGA (LIRIO FLORECIENDO) */
+    /* ==========================================
+       PANTALLA DE CARGA (ANIMACIÓN DEL LIRIO)
+    ========================================== */
     #lily-loader {
       position: fixed;
       top: 0;
@@ -105,7 +112,9 @@
       to { opacity: 1; }
     }
 
-    /* ESTILOS DE NAVEGACIÓN Y PORTADA */
+    /* ==========================================
+       CABECERA Y NAVEGACIÓN
+    ========================================== */
     header {
       background-color: var(--borgona-profundo);
       color: var(--rosa-suave);
@@ -114,6 +123,9 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
 
     header h1 {
@@ -135,6 +147,7 @@
       color: var(--dorado);
     }
 
+    /* PORTADA (HERO) */
     .hero {
       background: linear-gradient(135deg, var(--borgona-profundo), var(--rojo-vino));
       color: var(--blanco);
@@ -165,6 +178,8 @@
       font-weight: 600;
       border-radius: 30px;
       transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
     }
 
     .btn:hover {
@@ -172,19 +187,58 @@
       color: var(--blanco);
     }
 
-    /* CATÁLOGO DE PRODUCTOS */
-    .catalog {
+    /* ==========================================
+       SECCIÓN CONÓCENOS
+    ========================================== */
+    .about-section {
       padding: 80px 40px;
-      max-width: 1300px;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
-    .catalog h3 {
+    .section-title {
       text-align: center;
       font-family: 'Cormorant Garamond', serif;
       font-size: 2.8rem;
       color: var(--borgona-profundo);
-      margin-bottom: 50px;
+      margin-bottom: 40px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .about-card {
+      background: var(--blanco);
+      padding: 35px;
+      border-radius: 12px;
+      border: 1px solid var(--rosa-suave);
+      box-shadow: 0 5px 15px rgba(114, 17, 33, 0.08);
+      text-align: center;
+    }
+
+    .about-card h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--rojo-vino);
+      margin-bottom: 15px;
+    }
+
+    .about-card p {
+      line-height: 1.6;
+      color: var(--texto-oscuro);
+      font-size: 0.95rem;
+    }
+
+    /* ==========================================
+       CATÁLOGO DE PRODUCTOS (30 PERFUMES)
+    ========================================== */
+    .catalog {
+      padding: 80px 40px;
+      max-width: 1300px;
+      margin: 0 auto;
     }
 
     .grid {
@@ -235,12 +289,61 @@
       font-size: 1.1rem;
     }
 
+    /* ==========================================
+       SECCIÓN CONTÁCTANOS
+    ========================================== */
+    .contact-section {
+      background-color: var(--blanco);
+      padding: 80px 40px;
+      border-top: 1px solid var(--rosa-suave);
+    }
+
+    .contact-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 50px;
+    }
+
+    .contact-info h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--borgona-profundo);
+      margin-bottom: 20px;
+    }
+
+    .contact-info p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--rosa-suave);
+      border-radius: 8px;
+      font-family: 'Montserrat', sans-serif;
+      outline: none;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--rojo-vino);
+    }
+
     footer {
       background-color: var(--borgona-profundo);
       color: var(--rosa-suave);
       text-align: center;
       padding: 30px;
-      margin-top: 50px;
     }
   </style>
 </head>
@@ -274,6 +377,7 @@
     <h1>Velours</h1>
     <nav>
       <a href="#inicio">Inicio</a>
+      <a href="#conocenos">Conócenos</a>
       <a href="#coleccion">Colección</a>
       <a href="#contacto">Contacto</a>
     </nav>
@@ -285,8 +389,28 @@
     <a href="#coleccion" class="btn">Explorar Colección</a>
   </section>
 
+  <!-- SECCIÓN CONÓCENOS -->
+  <section class="about-section" id="conocenos">
+    <h3 class="section-title">Conócenos</h3>
+    <div class="about-grid">
+      <div class="about-card">
+        <h4>Nuestra Historia</h4>
+        <p>Velours nació del deseo de capturar la sofisticación de la alta perfumería artesanal. Cada fragancia está cuidadosamente concebida para evocar emociones profundas y recuerdos memorables a través de notas olfativas exclusivas.</p>
+      </div>
+      <div class="about-card">
+        <h4>Nuestra Misión</h4>
+        <p>Ofrecer perfumes de lujo que resalten la elegancia y personalidad de cada persona, seleccionando los ingredientes de flores nobles y maderas preciosas más puros del mundo.</p>
+      </div>
+      <div class="about-card">
+        <h4>Filosofía & Pasión</h4>
+        <p>Creemos en la perfumería como una forma de arte. El lirio, nuestra flor insignia, simboliza la pureza, distinción y renacer que transmite cada una de nuestras creaciones.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN CATÁLOGO (30 PRODUCTOS) -->
   <section class="catalog" id="coleccion">
-    <h3>Colección Exclusiva (30 Fragancias)</h3>
+    <h3 class="section-title">Colección Exclusiva (30 Fragancias)</h3>
     <div class="grid">
       
       <!-- 1 a 10 -->
@@ -478,7 +602,28 @@
     </div>
   </section>
 
-  <footer id="contacto">
+  <!-- SECCIÓN CONTÁCTANOS -->
+  <section class="contact-section" id="contacto">
+    <h3 class="section-title">Contáctanos</h3>
+    <div class="contact-container">
+      <div class="contact-info">
+        <h4>Atención Personalizada</h4>
+        <p><strong>Dirección:</strong> Boutique Velours, Av. Las Flores #123, Ciudad de Guatemala</p>
+        <p><strong>Teléfono:</strong> +502 2345 6789</p>
+        <p><strong>Correo Electrónico:</strong> contacto@veloursperfumes.com</p>
+        <p><strong>Horarios:</strong> Lunes a Sábado: 9:00 AM - 7:00 PM</p>
+      </div>
+
+      <form class="contact-form" onsubmit="event.preventDefault(); alert('¡Gracias por tu mensaje! Te responderemos pronto.');">
+        <input type="text" placeholder="Tu Nombre Completo" required>
+        <input type="email" placeholder="Tu Correo Electrónico" required>
+        <textarea rows="4" placeholder="Escribe tu consulta o pedido especial aquí..." required></textarea>
+        <button type="submit" class="btn">Enviar Mensaje</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
     <p>&copy; 2026 Velours Perfumes - Todos los derechos reservados.</p>
   </footer>
 
